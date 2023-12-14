@@ -1,12 +1,24 @@
-FROM python:3.9-alpine
+# Use an official Python runtime as a parent image
+FROM python:3.9
+
+# Set environment variables
 ENV PYTHONUNBUFFERED 1
 
+# Set the working directory in the container
 WORKDIR /coursehelper
-COPY requirements.txt .
-RUN pip install --upgrade pip
-RUN apk add --no-cache postgresql-dev gcc python3-dev musl-dev
-RUN pip install -r requirements.txt
-COPY . .
 
-EXPOSE 80
-CMD python manage.py runserver 0.0.0.0:80
+# Copy the current directory contents into the container at /coursehelper
+COPY . /coursehelper
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+# Expose port 8080
+EXPOSE 8080
+
+# Define environment variable
+ENV NAME World
+
+# Run manage.py on container startup
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]

@@ -1,0 +1,14 @@
+steps:
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/coursehelper:$SHORT_SHA', '.']
+
+  # Push the Docker image to Google Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/coursehelper:$SHORT_SHA']
+
+  # Deploy the image to Google Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: ['run', 'deploy', 'coursehelper-service', '--image', 'gcr.io/$PROJECT_ID/coursehelper:$SHORT_SHA', '--region', 'europe-north1', '--platform', 'managed']
+  timeout: '1600s'
