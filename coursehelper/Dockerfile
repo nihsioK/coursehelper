@@ -2,11 +2,19 @@ FROM python:3.9-alpine
 ENV PYTHONUNBUFFERED 1
 
 WORKDIR /coursehelper
+
+# Install required system dependencies
+RUN apk add --no-cache postgresql-dev gcc python3-dev musl-dev
+
+# Install Python dependencies
 COPY requirements.txt .
 RUN pip install --upgrade pip
-RUN apk add --no-cache postgresql-dev gcc python3-dev musl-dev
 RUN pip install -r requirements.txt
+
+# Copy project files
 COPY . .
 
 EXPOSE 8080
-CMD python manage.py runserver 0.0.0.0:8080
+
+# Start Gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "coursehelper.wsgi:application"]
