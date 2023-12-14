@@ -9,6 +9,7 @@ WORKDIR /coursehelper
 
 # Copy the current directory contents into the container at /coursehelper
 COPY . /coursehelper
+COPY .env /coursehelper/.env
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --upgrade pip
