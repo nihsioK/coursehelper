@@ -20,10 +20,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
 from cms.views import NoteViewSet, login_view, logout_view
+from rateprof.views import RatingViewSet, ProfessorViewSet
 
 router = routers.DefaultRouter()
 router.register(r'note', NoteViewSet)
-
+router.register(r'rateprof', RatingViewSet)
+router.register(r'prof', ProfessorViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
